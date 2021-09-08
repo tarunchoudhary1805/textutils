@@ -1,23 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import Navbar from "./components/Navbar";
+import TextForm from "./components/TextForm";
+import About from "./components/About";
+import Alert from "./components/Alert";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+  const [alert, setAlert] = useState(null);
+  const showAlert = (message, type) => {
+    setAlert({
+      msg: message,
+      type: type,
+    });
+  };
+  const toggleMode = () => {
+    setDarkMode(!darkMode);
+    document.title = "Dark Mode";
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Navbar
+          title="TextUtils"
+          aboutText="about"
+          toggleMode={toggleMode}
+          mode={darkMode}
+        />
+        <Alert
+          alert={`${darkMode ? "Dark Mode Enabled" : "Dark mode disabled"}`}
+        />
+        <div className="container my-3">
+          <Switch>
+            <Route exact path="/">
+              <TextForm heading="Enter the text to analyze" />
+            </Route>
+            <Route exact path="/about">
+              <About />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
     </div>
   );
 }
